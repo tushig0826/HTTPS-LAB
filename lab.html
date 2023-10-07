@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IP streaming Lab!</title>
+<style>
+    body {
+        width: 50em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+
+<!-- .js és .css beillesztes - BEGIN -->
+
+<!-- .js és .css beillesztes - END -->
+
+</head>
+
+<body>
+<h1>IP streaming mérés!</h1>
+<p>HTML5, HLS, MPEG-DASH videó tesztelése Nginx szerver + RTMP-modul kiegészítő alkalmazásal.</p>
+<p><b>Referencia</b></br>
+HTML5 video tag: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video</a><br>
+Event handlers: <a href="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers">https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers</a><br>
+Events: <a href="https://developer.mozilla.org/en-US/docs/Web/Events">https://developer.mozilla.org/en-US/docs/Web/Events</a><br>
+Players: <a href="http://praegnanz.de/html5video/index.php">http://praegnanz.de/html5video/index.php</a></p>
+
+<!----------------------HTML5 streaming feladatok-------------------------------->
+<h2>HTML5 streaming</h2>
+
+
+<!-------------------------- 3.a feladat ------------------------------------->
+<h3>3.a feladat</h3>
+Illessze be a bbb_1080p.mp4 videót 500px szélességben, a vezérlők megjelenítésével és engedélyezze az automatikus lejátszást hang nélkül! Annak érdekében, hogy ne zavarjuk a többi kollégát, a hang némítása a minden feladatokban is szükséges!<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+<!-------------------------- 3.b feladat ------------------------------------->
+<h3>3.b feladat</h3>
+Tiltsa le az automatikus lejátszást és állítsa be poszterképként a bbb.png-t!<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+<!-------------------------- 3.c feladat ------------------------------------->
+<h3>3.c feladat</h3>
+Valósítsa meg, hogy a videó csak akkor induljon, ha az egérmutató a videó fölé kerül. Ha a mutató elhagyja a videó területét a lejátszás szüneteljen (pause)!<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+<!-------------------------- 3.d feladat ------------------------------------->
+<h3>3.d feladat</h3>
+Cserélje le a vezérlőt Playr player-re!<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+<!-------------------------- 3.e feladat ------------------------------------->
+<h3>3.e feladat</h3>
+Cserélje le a vezérlőt VideoJs player-re!<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+
+<!-------------------------- HLS feladatok ----------------------------------->
+<h2>4. HTTP Live Streaming (HLS)</h2>
+
+<!-------------------------- 4.a feladat ------------------------------------->
+<h3>4.a feladat</h3>
+Készítse elő a HLS videó szegmenseket és index fájlokat!
+Hozza létre a HLS chunk-okat (.ts) és az index fájlt (.m3u8) a következők szerint, a megfeleő könyvtárakat létrehozva:
+<ul>
+<li>/videoHLS/1080: felbontás 1080p (1920x1080), GoP=30, chunk size 10 s, bitsebesség 2 Mb/s, illetve 1 percnyi videót kódoljunk át
+<li>/videoHLS/720: felbontás 720p (1280x720), GoP=60, chunk size 10 s, bitsebesség 1,3 Mb/s, illetve 1 percnyi videót kódoljunk át
+<li>/videoHLS/480: felbontás 480p (720x480), GoP=60, chunk size 10 s, bitsebesség 0,8 Mb/s, illetve 1 percnyi videót kódoljunk át
+</ul>
+
+<!-------------------------- 4.b feladat ------------------------------------->
+<h3>4.b feladat</h3>
+Illessze be a VideoJS HLS lejátszót és forrásnak adja meg az videoHLS/1080/out.m3u8 index fájlt! Wireshark-kal kapja el az átvitt .m3u8 információt!<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+<!-------------------------- 4.c feladat ------------------------------------->
+<h3>4.c feladat</h3>
+Különböző felbontás támogatásához (adaptív streaming) hozza létre az /usr/local/nginx/html/videoHLS/adaptiv.m3u8 manifest fájlt, amely tartalmazza a három különböző felbontást (1080p, 720p, 480p)! A különböző felbontáshoz adja meg a következő sávszélesség értékeket:<br>
+	1080p: 550000 bit/s<br>
+	720p: 300000 bit/s<br>
+	480p: 155000 bit/s<br><br>
+
+<!-------------------------- 4.d feladat ------------------------------------->
+<h3>4.d feladat</h3>
+Illessze be a VideoJS HLS lejátszót és adja meg forrásként a több felbontást is tartalmazó adaptiv.m3u8 index fájlt!<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+<!-------------------------- 4.e feladat ------------------------------------->
+<h3>4.e feladat</h3>
+Törölje a böngésző cache-t (Firefox: Előzmények menü -> Előzmények törlése...), hogy ne a gyorsító tárból játssza le a tartalmat, majd a videó lejátszása előtt, esetleg közben is szerver oldalon korlátozza az átviteli az uplink sebességet 1000 kb/s, downlink 5000 kb/s és figyelje meg a HLS adaptivitását! Annak érdekében, hogy ne keveredjen a forgalom, csupán ez az egy videó lejátszá ablak legyen a HTML oldalon.
+Forgalom korlátozása:<br>
+	sudo wondershaper eth0 5000 1000<br>
+Korlátozás megszüntetése:<br>
+	sudo wondershaper clear eth0<br>
+Figyelje meg mely videó szegmenseket próbálja a böngésző letölteni! A böngésző webfejlesztői eszközeinek segítségével nyomon tudja követni az adatforgalmat (Firefox: Eszközök -> Webfejlesztő menü vagy F12 gyorsbillentyű)
+<br>
+Figyelje meg a HLS adaptivitását!
+<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+
+<!-------------------------- MPEG-DASH feladatok ----------------------------------->
+<h2>5. MPEG-DASH streaming</h2>
+<h3>5.a feladat</h3>
+Készítse elő az MPEG-DASH videó szegmenseket és index fájlokat!<br>
+Hozza létre a megfelelően kódolt videót és az .mpd fájlt!<br>
+Videó felbontás 1920x1080, GoP=30, chunk size 2 s, bitsebesség 2 Mb/s, illetve 1 percnyi videót kódoljunk át!
+
+<!-------------------------- 5.c feladat ------------------------------------->
+<h3>5.b feladat</h3>
+Illessze be a VideoJs HLS lejátszót és adja meg forrásként a "videoDASH/1080/out1080_dash.mpd" fájlt!<br><br>
+
+<!-- kód BEGIN -->
+
+<!-- kód END -->
+
+
+</body>
+</html>

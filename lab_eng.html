@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HTTP streaming Lab!</title>
+<style>
+    body {
+        width: 50em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+
+<!-- .js és .css beillesztes - BEGIN -->
+<!-- Playr head -->
+<link href="Playr-master/playr.css" rel="stylesheet">
+<script type="text/javascript" src="Playr-master/playr.js"></script>
+
+<!-- VideoJS head -->
+<link href="Videojs/video-js.css" rel="stylesheet">
+<script src="Videojs/video.js"></script>
+
+<!-- HLS head -->
+<!-- HLS plugin -->
+<script src="Videojs/videojs.hls.min.js"></script>
+<!-- MPEG-DASH plugin -->
+<script src="Videojs/dash.all.js"></script>
+<script src="Videojs/videojs-dash.min.js"></script>
+
+<!-- .js és .css beillesztes - END -->
+<link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
+<script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-http-streaming@1.7.0/dist/videojs-http-streaming.min.js"></script>
+
+</head>
+
+<body>
+<h1>HTTP streaming exercise!</h1>
+<p>HTML5, HLS, MPEG-DASH video testing with Nginx server + RTMP module add-on.</p>
+<p><b>References</b></br>
+HTML5 video tag: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video</a><br>
+Events: <a href="https://developer.mozilla.org/en-US/docs/Web/Events">https://developer.mozilla.org/en-US/docs/Web/Events</a><br>
+Players: <a href="http://praegnanz.de/html5video/index.php">http://praegnanz.de/html5video/index.php</a></p>
+
+<!----------------------HTML5 streaming exercises-------------------------------->
+<h2>HTML5 streaming</h2>
+
+
+<!-------------------------- 2.a exercise ------------------------------------->
+<h3>2.a exercise</h3>
+Insert the video bbb_1080p.mp4 at 500px width, with the controls displayed and enable autoplay without sound! To avoid disturbing other colleagues, mute the sound in all tasks!<br><br>
+
+<!-- code BEGIN -->
+<video width="500" controls autoplay muted>
+  <source src="bbb_1080p.mp4" type="video/mp4">
+</video>
+
+<!-- code END -->
+
+<!-------------------------- 2.b exercise ------------------------------------->
+<h3>2.b exercise</h3>
+Disable autoplay and set a bbb.png as poster image!!<br><br>
+
+<!-- code BEGIN -->
+<video width="500" controls muted poster="bbb.png">
+  <source src="bbb_1080p.mp4" type="video/mp4">
+ 
+</video>
+
+<!-- code END -->
+
+<!-------------------------- 2.c exercise ------------------------------------->
+<h3>2.c exercise</h3>
+Make the video start only when the mouse pointer is over the video. If the mouse pointer leaves the video area, pause the video!<br><br>
+
+<!-- code BEGIN -->
+<video width="500" controls muted poster="bbb.png" onmouseover="play()" onmouseout="pause()">
+  <source src="bbb_1080p.mp4" type="video/mp4">
+</video>
+
+<script>
+function play() {
+  var video = document.getElementsByTagName('video')[0];
+  video.play();
+}
+
+function pause() {
+  var video = document.getElementsByTagName('video')[0];
+  video.pause();
+}
+</script>
+
+<!-- code END -->
+
+<!-------------------------- 2.d exercise ------------------------------------->
+<h3>2.d exercise</h3>
+Replace the controller to Playr player! Don't forget to add the JavaScript add-ons in the HTML header!<br><br>
+
+<!-- code BEGIN -->
+<video class="playr_video" width="500" controls autoplay muted>
+  <source src="bbb_1080p.mp4" type="video/mp4">
+</video>
+
+<!-- code END -->
+
+<!-------------------------- 2.e exercise ------------------------------------->
+<h3>2.e exercise</h3>
+Replace the controller to VideoJS player! Don't forget to add the JavaScript add-ons in the HTML header! <br><br>
+
+<!-- code BEGIN -->
+<video id="video_1" class="video-js" width="500" controls autoplay muted>
+  <source src="bbb_1080p.mp4">
+</video>
+
+<script>
+  var player = videojs('video_1');
+</script>
+
+<!-- code END -->
+
+
+<!-------------------------- HLS exercises ----------------------------------->
+<h2>3. HTTP Live Streaming (HLS)</h2>
+
+<!-------------------------- 3.a exercise ------------------------------------->
+<h3>3.a exercise</h3>
+Prepare the HLS video chunks (.ts) and the .m3u8 manifest file using FFMPEG with different resolutions by saving them in separate folders!
+
+<ul>
+<li>/videoHLS/1080: resolution 1080p (1920x1080), GoP=30, chunk size 10 s, bitrate 2 Mb/s, encode 1 minute of video
+<li>/videoHLS/720: resolution 720p (1280x720), GoP=60, chunk size 10 s, bitrate 1,3 Mb/s, encode 1 minute of video
+<li>/videoHLS/480: resolution 480p (720x480), GoP=60, chunk size 10 s, bitrate 0,8 Mb/s, encode 1 minute of video
+</ul>
+
+<!-------------------------- 3.b exercise ------------------------------------->
+<h3>3.b exercise</h3>
+Insert the VideoJS HLS player and specify the videoHLS/1080/out.m3u8 index file as source. Don't forget to add the JavaScript add-ons in the HTML header! Use Wireshark to capture the transferred .m3u8 information!
+<br><br>
+
+<!-- code BEGIN -->
+
+<video id="my-video" class="video-js" controls preload="auto" width="500"
+        data-setup='{"fluid": true}'>
+        <source src="videoHLS/1080/out.m3u8" type="application/x-mpegURL">
+    </video>
+
+    <script>
+        var player = videojs('my-video');
+    </script>
+<!-- code END -->
+
+<!-------------------------- 3.c exercise ------------------------------------->
+<h3>3.c exercise</h3>
+To support different resolutions (adaptive streaming), create the manifest file [host_www_folder]/videoHLS/adaptive.m3u8 containing the three different resolutions (1080p, 720p, 480p)!<br>
+For the different resolutions, enter the following bandwidth values:<br><br>
+	1080p: 550000 bit/s<br>
+	720p: 300000 bit/s<br>
+	480p: 155000 bit/s<br><br>
+
+<!-------------------------- 3.d exercise ------------------------------------->
+<h3>3.d exercise</h3>
+Insert the VideoJS HLS player and specify adaptive.m3u8 index as the source.<br><br>
+
+<!-- code BEGIN -->
+<video id="adaptive-video" class="video-js" controls preload="auto" width="500"
+        data-setup='{"fluid": true}'>
+        <source src="videoHLS/adaptive/adaptive.m3u8" type="application/x-mpegURL">
+    </video>
+
+    <script>
+        var player = videojs('adaptive-video');
+    </script>
+<!-- code END -->
+
+<!-------------------------- 3.e exercise ------------------------------------->
+<h3>3.e exercise</h3>
+Clear the browser cache (More tools -->  Clear Browsing Data...) to avoid playing the content from the cache.<br>
+Before playing the video, or during playout, limit the transfer capacity on the client side. <br>
+In Firfox or Chrome, this can be done in the Web Developer Tools mode (More tools --> Developer tools or F12 shortcut).<br><br>
+
+Examine which video segments your browser is trying to download! <br>
+You can monitor your traffic using the browser's web developer tools (More tools --> Developer tools or F12 shortcut), Network menu.<br>
+Examine HLS adaptivity!
+<br><br>
+
+<!-- code BEGIN -->
+
+<!-- code END -->
+
+
+<!-------------------------- MPEG-DASH exercises ----------------------------------->
+<h2>5. MPEG-DASH streaming</h2>
+<h3>5.a exercise</h3>
+Create the video encoded for MPEG-DASH and prepare the MPEG-DASH video segments and .mpd manifest file.<br><br>
+The video resolution should be 1920x1080, GoP=30, chunk size 2 s, bit rate 2 Mb/s, and 1 minute of video should be encoded!
+
+<!-------------------------- 5.c exercise ------------------------------------->
+<h3>5.b exercise</h3>
+Insert the VideoJS player and specify the .mpd index file as source. Test its operation!<br><br>
+
+<!-- code BEGIN -->
+<video id="dash-video" class="video-js" controls preload="auto" width="500">
+  <source src="videoDASH/out.mpd" type="application/dash+xml"> 
+</video>
+
+<script>
+  var player = videojs('dash-video');
+</script>
+<!-- code END -->
+
+
+</body>
+</html>
